@@ -6,7 +6,7 @@ public class Scripts {
 	static void Script(int choise) throws IOException {
 		if(choise == 1) {
 			System.out.println("\n\nKALOSORISES STO TADE\nEXEIS TIS EPILOGES PARAKATW:");
-			System.out.println("1. Plirofories gia to Data directory\n2. Dimiourgia euretiriou\n3. Anazhthsh leksis\n4. Exit");
+			System.out.println("1. Plirofories gia to Data directory\n2. Dimiourgia h enhmerwsh euretiriou\n3. Anazhthsh leksis\n4. Exit");
 		}
 		else if(choise == 2) {
 			System.out.println("\n\nIparxoyn sinolika: " + LuceneTester.numberOfFiles() + " arxeia");

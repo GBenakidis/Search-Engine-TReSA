@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
@@ -17,7 +20,7 @@ public class LuceneTester {
 	static String dataDir = LuceneConstants.DATA_DIR;
 	Indexer indexer;
 	Searcher searcher;
-
+	private IndexWriter writer;
 	public static void main(String[] args) {
 		Boolean exit = false;
 		
@@ -30,7 +33,16 @@ public class LuceneTester {
 					  Scripts.Script(2);
 				    break;
 				  case 2:
-					  caseOption2();
+					  	System.out.println("Epelekse:\n1. Eisagwgh arxeioy\n2.Diagrafh arxeioy\n");
+						switch(input.nextInt()) {
+							case 1:
+								caseOption2(1);
+								break;
+							case 2:
+								caseOption2(2);
+								break;
+						}
+		
 				    break;
 				  case 3:
 					  caseOption3(input);
@@ -53,9 +65,33 @@ public class LuceneTester {
 		
 	}
 		
-	public static void caseOption2() throws IOException, ParseException {
+	public static void caseOption2(int choice) throws IOException, ParseException {
 		LuceneTester tester = new LuceneTester();
-		tester.createIndex();
+		if(choice==1) {
+			System.out.println("Epelekse kapoio arxeio px Article8.txt Article10.txt\n");
+			Scanner input = new Scanner(System.in);
+			String articles = input.nextLine();
+			ArrayList<String> art = new ArrayList<String>();
+			String[] a = articles.split(" ");
+			for(String str : a) {
+				art.add(str);
+			}
+			
+			tester.createIndex(art);
+			tester.search("fuck");
+		}else {
+			System.out.println("Epelekse kapoio arxeio px Article8.txt Article10.txt\n");
+			Scanner input = new Scanner(System.in);
+			String articles = input.nextLine();
+			ArrayList<String> art = new ArrayList<String>();
+			String[] a = articles.split(" ");
+			for(String str : a) {
+				art.add(str);
+			}
+			DeleteDocuments deleteDocuments = new DeleteDocuments();
+			deleteDocuments.deleteSpecificDocs(art);
+		}
+		
 		
 		Scripts.Script(12);
 	}
@@ -69,13 +105,12 @@ public class LuceneTester {
 		tester.search(wordSearching);
 	}
 	
-	private void createIndex() throws IOException {
+	private void createIndex(ArrayList<String> articles) throws IOException {
 		indexer = new Indexer(indexDir);
 		int numIndexed;
-			long startTime = System.currentTimeMillis();
-		
-		numIndexed = indexer.createIndex(dataDir, new TextFileFilter());
-			long endTime = System.currentTimeMillis();
+			long startTime = System.currentTimeMillis();		
+		numIndexed = indexer.createIndex(dataDir, new TextFileFilter(),articles);
+			long endTime = System.currentTimeMillis();		
 		indexer.close();
 			System.out.println("\n"+numIndexed + " File(s) indexed, time taken: " + (endTime-startTime)+" ms");
 	}
