@@ -28,8 +28,7 @@ public class Searcher {
 		indexDirectory = FSDirectory.open(indexPath);
 		indexReader = DirectoryReader.open(indexDirectory);
 		indexSearcher = new IndexSearcher(indexReader);
-		queryParser = new QueryParser(LuceneConstants.CONTENTS, new
-		StandardAnalyzer());
+		queryParser = new QueryParser(LuceneConstants.CONTENTS, new StandardAnalyzer());
 	}
 	
 	public TopDocs search(String searchQuery) throws IOException, ParseException {

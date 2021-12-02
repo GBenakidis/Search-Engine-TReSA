@@ -1,7 +1,5 @@
 package com.lucenetutorial.lucene;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,12 +27,15 @@ public class LuceneTester {
 				Scanner input = new Scanner(System.in);
 				switch(input.nextInt()) {
 				  case 1:
-					  caseOption1(input);
+					  Scripts.Script(2);
 				    break;
 				  case 2:
 					  caseOption2();
 				    break;
 				  case 3:
+					  caseOption3(input);
+				    break;
+				  case 4:
 					  exit = !exit;
 					  Scripts.Script(3);
 					break;
@@ -51,89 +52,32 @@ public class LuceneTester {
 		}while(!exit);
 		
 	}
-	
-	public static void caseOption1(Scanner input) throws IOException {
-		Boolean exit = false;
 		
-		do {
-			try {
-				Scripts.Script(2);
-			
-				switch(input.nextInt()) {
-				  case 1:
-					  addTextFile(input);
-				    break;
-				  case 2:
-					  removeTextFile(input);
-				    break;
-				  case 3:
-					  editTextFile();
-					break;
-				  case 4:
-					  exit=!exit;
-					break;
-				  default:
-					  Scripts.Script(4);
-				}
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
-		}while(!exit);
-	}
-	
-	private static void addTextFile(Scanner input) throws IOException {
-		input.nextLine(); // to reset keyboard
-		Scripts.Script(6);
-		String placeText = input.nextLine();
-		Scripts.Script(7);
-		String peopleText = input.nextLine();
-		Scripts.Script(8);
-		String titleText = input.nextLine();
-		Scripts.Script(9);
-		String bodyText = input.nextLine();
-		
-		FileWriter fileWriter = new FileWriter(dataDir + "\\Article"+ numberOfFiles() + ".txt");
-		fileWriter.write("<PLACES>"+ placeText + "</PLACES>\n"
-					   + "<PEOPLE>" + peopleText +"</PEOPLE>\n" 
-					   + "<TITLE>" + titleText + "</TITLE>\n"
-					   + "<BODY>" + bodyText + "</BODY>");
-		fileWriter.close();
-		Scripts.Script(5);
-	}
-	
-	private static void removeTextFile(Scanner input) throws IOException {
-//		File directoryPath = new File(dataDir);
-//        String texts_names[] = directoryPath.list();
-//        
-//        Scripts.Script(10);
-//		int number_to_delete = input.nextInt();
-//		
-//		File specifiedFile = new File(dataDir + "\\Article"+ number_to_delete + ".txt");
-	}
-	
-	private static void editTextFile() {
-		
-	}
-	
 	public static void caseOption2() throws IOException, ParseException {
-		LuceneTester tester;
-		
-		tester = new LuceneTester();
+		LuceneTester tester = new LuceneTester();
 		tester.createIndex();
 		
-		tester.search("INTERNATIONAL");
+		Scripts.Script(12);
+	}
+	
+	public static void caseOption3(Scanner input) throws IOException, ParseException {
+		LuceneTester tester = new LuceneTester();
+		Scripts.Script(13);
+		input.nextLine(); // clear keyboard
+		String wordSearching = input.nextLine();
+		
+		tester.search(wordSearching);
 	}
 	
 	private void createIndex() throws IOException {
 		indexer = new Indexer(indexDir);
 		int numIndexed;
-		long startTime = System.currentTimeMillis();
-		numIndexed = indexer.createIndex(dataDir, new TextFileFilter());
-		long endTime = System.currentTimeMillis();
+			long startTime = System.currentTimeMillis();
 		
+		numIndexed = indexer.createIndex(dataDir, new TextFileFilter());
+			long endTime = System.currentTimeMillis();
 		indexer.close();
-		System.out.println("\n"+numIndexed + " File(s) indexed, time taken: " + (endTime-startTime)+" ms");
+			System.out.println("\n"+numIndexed + " File(s) indexed, time taken: " + (endTime-startTime)+" ms");
 	}
 
 	private void search(String searchQuery) throws IOException, ParseException 

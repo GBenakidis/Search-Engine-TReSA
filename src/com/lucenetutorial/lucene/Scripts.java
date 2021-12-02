@@ -6,11 +6,10 @@ public class Scripts {
 	static void Script(int choise) throws IOException {
 		if(choise == 1) {
 			System.out.println("\n\nKALOSORISES STO TADE\nEXEIS TIS EPILOGES PARAKATW:");
-			System.out.println("1. Plirofories kai energies gia to Data directory\n2. Anazhthsh leksis\n3. Exit");
+			System.out.println("1. Plirofories gia to Data directory\n2. Dimiourgia euretiriou\n3. Anazhthsh leksis\n4. Exit");
 		}
 		else if(choise == 2) {
 			System.out.println("\n\nIparxoyn sinolika: " + LuceneTester.numberOfFiles() + " arxeia");
-			System.out.println("\nOI EPILOGES POU EXEIS EINAI:\n1. Prosthiki arxeiou\n2. Afairesi arxeiou\n3. Tropopoihsh arxeiou\n4. Back!");
 		}
 		else if(choise == 3) {
 			System.out.println("\nBye!");
@@ -35,6 +34,15 @@ public class Scripts {
 		}
 		else if(choise == 10) {
 			System.out.println("\nPoion arithmo arxeiou thes na diagrapseis:");
+		}
+		else if(choise == 11) {
+			System.out.println("\nTi theleis na kanei:");
+		}
+		else if(choise == 12) {
+			System.out.println("\nTo euretirio dimiourgithike!");
+		}
+		else if(choise == 13) {
+			System.out.println("\nGrapse thn leksi pou thes na breis:");
 		}
 
 	}

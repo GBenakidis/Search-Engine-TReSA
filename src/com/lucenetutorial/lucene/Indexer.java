@@ -5,11 +5,9 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,11 +28,8 @@ public class Indexer {
 	public Indexer(String indexDirectoryPath) throws IOException {
 		// This directory will contain the indexes
 		Path indexPath = Paths.get(indexDirectoryPath);
-		if(!Files.exists(indexPath)) {
-			Files.createDirectory(indexPath);
-		}
+		deleteCreateIndex(indexDirectoryPath, indexPath);
 		
-		// Path indexPath = Files.createTempDirectory(indexDirectoryPath);
 		Directory indexDirectory = FSDirectory.open(indexPath);
 		
 		// Create the indexer
@@ -53,12 +48,8 @@ public class Indexer {
 		
 		String preProcessed = contentTaker(file);
 		
-		// System.out.println("\n\n" + preProcessed); // Printing 
-		
 		// Pre-processing
 		String postProcessing = preProcessing(preProcessed);
-		
-		// System.out.println("\n\n" + postProcessing); // Printing 
 		
 		// Index file contents
 		Field contentField = new Field(LuceneConstants.CONTENTS, postProcessing, TextField.TYPE_STORED);
@@ -157,6 +148,32 @@ public class Indexer {
 		
 		return writer.numRamDocs();
 	}
+
+	public void deleteCreateIndex(String indexDirectoryPath, Path indexPath) throws IOException {
+		if(Files.exists(indexPath)) {
+			recursiveDelete(new File(LuceneConstants.INDEX_DIR));
+		}
+		//Files.createDirectory(indexPath);
+	}
+	
+	public static void recursiveDelete(File file) {
+		// https://www.journaldev.com/833/java-delete-directory-folder
+		
+        //to end the recursive loop
+        if (!file.exists())
+            return;
+        
+        //if directory, go inside and call recursively
+        if (file.isDirectory()) {
+            for (File f : file.listFiles()) {
+                //call recursively
+                recursiveDelete(f);
+            }
+        }
+        //call delete to delete files and empty directory
+        file.delete();
+        System.out.println("Deleted file/folder: "+file.getAbsolutePath());
+    }
 
 	public void close() throws CorruptIndexException, IOException {
 		writer.close();
