@@ -28,4 +28,11 @@ public class DeleteDocuments {
 		   System.out.println("index contains documents: ");
 		   writer.close();
 	}
+	public boolean checkIfDocumentExits() {
+		return true;
+	}
+	
+    private boolean checkifSpecificDocExist(String doc) {
+    	return true;
+    }
 }

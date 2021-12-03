@@ -35,10 +35,14 @@ public class Indexer extends PreProcessoring{
 	public Indexer(String indexDirectoryPath) throws IOException  {
 		// This directory will contain the indexes
 		Path indexPath = Paths.get(indexDirectoryPath);
-		//deleteCreateIndex(indexDirectoryPath, indexPath);
-	
-		Directory indexDirectory = FSDirectory.open(indexPath);
 		
+		//deleteCreateIndex(indexDirectoryPath, indexPath);
+		
+		
+		if(!Files.exists(indexPath)) {
+			 Files.createDirectory(indexPath);
+		 }
+		Directory indexDirectory = FSDirectory.open(indexPath);
 		// Create the indexer
 		IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());
 		writer = new IndexWriter(indexDirectory, config);

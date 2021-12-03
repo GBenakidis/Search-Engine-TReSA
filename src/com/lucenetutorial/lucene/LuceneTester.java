@@ -1,5 +1,6 @@
 package com.lucenetutorial.lucene;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -8,12 +9,16 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
 
 public class LuceneTester {
 	static String indexDir = LuceneConstants.INDEX_DIR;
@@ -64,21 +69,49 @@ public class LuceneTester {
 		}while(!exit);
 		
 	}
-		
+	public boolean checkTheName(String articles) {
+		String[] arr = articles.split(" ");
+		for(String str : arr) {
+			if(str.startsWith("Article")&&str.endsWith(".txt")) {
+				String num = str.replace("Article", "");
+				num = num.replace(".txt", "");
+				System.out.println("ffdfdfsdfsdfsd "+num);
+			    try {
+			        int d = Integer.parseInt(num);
+			    } catch (NumberFormatException nfe) {
+			        return false;
+			    }
+			    return true;
+			}else {
+				return false;
+			}
+		}
+		return true;
+	}
 	public static void caseOption2(int choice) throws IOException, ParseException {
 		LuceneTester tester = new LuceneTester();
+		int i=0;
+		File[] files = new File("D:\\works\\Search-Engine-TReSA\\Data").listFiles();
+	    for (File file : files) 	
+			System.out.println("File "+(i++)+": "+file.getName());
+							
 		if(choice==1) {
 			System.out.println("Epelekse kapoio arxeio px Article8.txt Article10.txt\n");
 			Scanner input = new Scanner(System.in);
 			String articles = input.nextLine();
+						
 			ArrayList<String> art = new ArrayList<String>();
 			String[] a = articles.split(" ");
 			for(String str : a) {
-				art.add(str);
+				if(tester.checkTheName(str)) {
+					art.add(str);
+				}else {
+					System.out.println("Incorrect file name: "+ str);
+				}
+				
 			}
-			
-			tester.createIndex(art);
-			tester.search("fuck");
+			if(!art.isEmpty())
+				tester.createIndex(art);
 		}else {
 			System.out.println("Epelekse kapoio arxeio px Article8.txt Article10.txt\n");
 			Scanner input = new Scanner(System.in);
@@ -86,16 +119,29 @@ public class LuceneTester {
 			ArrayList<String> art = new ArrayList<String>();
 			String[] a = articles.split(" ");
 			for(String str : a) {
-				art.add(str);
+				if(tester.checkTheName(str)) {
+					art.add(str);
+				}else {
+					System.out.println("Incorrect file name: "+ str);
+				}
 			}
-			DeleteDocuments deleteDocuments = new DeleteDocuments();
-			deleteDocuments.deleteSpecificDocs(art);
+			if(!art.isEmpty()) {
+				DeleteDocuments deleteDocuments = new DeleteDocuments();
+				deleteDocuments.deleteSpecificDocs(art);
+			}
+			
 		}
 		
 		
 		Scripts.Script(12);
 	}
-	
+	public void documents() throws IOException {
+		Path path = Paths.get("D:\\works\\Search-Engine-TReSA\\Index");
+     	Directory directory = FSDirectory.open(path);
+     	IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());
+		writer = new IndexWriter(directory,config);
+		System.out.println(writer.getDocStats());
+	}
 	public static void caseOption3(Scanner input) throws IOException, ParseException {
 		LuceneTester tester = new LuceneTester();
 		Scripts.Script(13);
