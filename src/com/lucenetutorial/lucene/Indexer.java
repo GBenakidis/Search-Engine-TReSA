@@ -71,18 +71,16 @@ public class Indexer extends PreProcessoring{
 		
 		return document;
 	}
-	
-	
+
 	private void indexFile(File file) throws IOException {
 		System.out.println("Indexing " + file.getCanonicalPath());
 		Document document = getDocument(file);
 		writer.addDocument(document);
 	}
 	
-	public int createIndex(String dataDirPath, FileFilter filter, ArrayList<String> articles) throws IOException {
+	public int editIndex(String dataDirPath, FileFilter filter, ArrayList<String> articles) throws IOException {
 		// Get all files in the data directory
-		
-		
+
 		int i=0;
 		File[] files = new File(dataDirPath).listFiles();
 		for (File file : files) {
@@ -101,11 +99,16 @@ public class Indexer extends PreProcessoring{
 		return writer.numRamDocs();
 	}
 
-	public void deleteCreateIndex(String indexDirectoryPath, Path indexPath) throws IOException {
-		if(Files.exists(indexPath)) {
-			recursiveDelete(new File(LuceneConstants.INDEX_DIR));
+	public int createIndex(String dataDirPath, FileFilter filter) throws IOException {
+		// Get all files in the data directory
+		File[] files = new File(dataDirPath).listFiles();
+		for (File file : files) {
+			if(!file.isDirectory() && !file.isHidden() && file.exists() && file.canRead() && filter.accept(file) ){
+				indexFile(file);
+			}
 		}
-		//Files.createDirectory(indexPath);
+
+		return writer.numRamDocs();
 	}
 	
 	public static void recursiveDelete(File file) {
@@ -132,5 +135,5 @@ public class Indexer extends PreProcessoring{
 	}
 	
 	
-	
+
 }

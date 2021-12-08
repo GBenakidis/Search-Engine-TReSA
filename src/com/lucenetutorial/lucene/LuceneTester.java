@@ -21,14 +21,13 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
 public class LuceneTester {
-	static String indexDir = LuceneConstants.INDEX_DIR;
-	static String dataDir = LuceneConstants.DATA_DIR;
 	Indexer indexer;
 	Searcher searcher;
 	private IndexWriter writer;
+
 	public static void main(String[] args) {
 		Boolean exit = false;
-		
+		System.out.println("\n\n\nREEEEEEEEEEEEEEEEE\n\n\n");
 		do {
 			try {
 				Scripts.Script(1);
@@ -38,13 +37,16 @@ public class LuceneTester {
 					  Scripts.Script(2);
 				    break;
 				  case 2:
-					  	System.out.println("Epelekse:\n1. Eisagwgh arxeioy\n2.Diagrafh arxeioy\n");
+						System.out.println("\n\nEpelekse:\n1. Dimiourgia/Epanadimioiurgia index\n2. Eisagwgh arxeioy\n3. Diagrafh arxeioy\n");
 						switch(input.nextInt()) {
 							case 1:
 								caseOption2(1);
 								break;
 							case 2:
 								caseOption2(2);
+								break;
+							case 3:
+								caseOption2(3);
 								break;
 						}
 		
@@ -69,6 +71,7 @@ public class LuceneTester {
 		}while(!exit);
 		
 	}
+
 	public boolean checkTheName(String articles) {
 		String[] arr = articles.split(" ");
 		for(String str : arr) {
@@ -88,14 +91,18 @@ public class LuceneTester {
 		}
 		return true;
 	}
+
 	public static void caseOption2(int choice) throws IOException, ParseException {
 		LuceneTester tester = new LuceneTester();
 		int i=0;
-		File[] files = new File("D:\\works\\Search-Engine-TReSA\\Data").listFiles();
+		File[] files = new File(LuceneConstants.DATA_DIR).listFiles();
 	    for (File file : files) 	
 			System.out.println("File "+(i++)+": "+file.getName());
-							
-		if(choice==1) {
+
+		if(choice==1){
+			tester.createIndex();
+			Scripts.Script(12);
+		}else if(choice==2) {
 			System.out.println("Epelekse kapoio arxeio px Article8.txt Article10.txt\n");
 			Scanner input = new Scanner(System.in);
 			String articles = input.nextLine();
@@ -111,8 +118,8 @@ public class LuceneTester {
 				
 			}
 			if(!art.isEmpty())
-				tester.createIndex(art);
-		}else {
+				tester.editIndex(art);
+		}else if(choice==3){
 			System.out.println("Epelekse kapoio arxeio px Article8.txt Article10.txt\n");
 			Scanner input = new Scanner(System.in);
 			String articles = input.nextLine();
@@ -130,18 +137,19 @@ public class LuceneTester {
 				deleteDocuments.deleteSpecificDocs(art);
 			}
 			
+		}else {
+			Scripts.Script(4);
 		}
-		
-		
-		Scripts.Script(12);
 	}
+
 	public void documents() throws IOException {
-		Path path = Paths.get("D:\\works\\Search-Engine-TReSA\\Index");
+		Path path = Paths.get(LuceneConstants.INDEX_DIR);
      	Directory directory = FSDirectory.open(path);
      	IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());
 		writer = new IndexWriter(directory,config);
 		System.out.println(writer.getDocStats());
 	}
+
 	public static void caseOption3(Scanner input) throws IOException, ParseException {
 		LuceneTester tester = new LuceneTester();
 		Scripts.Script(13);
@@ -151,19 +159,29 @@ public class LuceneTester {
 		tester.search(wordSearching);
 	}
 	
-	private void createIndex(ArrayList<String> articles) throws IOException {
-		indexer = new Indexer(indexDir);
+	private void editIndex(ArrayList<String> articles) throws IOException {
+		indexer = new Indexer(LuceneConstants.INDEX_DIR);
 		int numIndexed;
 			long startTime = System.currentTimeMillis();		
-		numIndexed = indexer.createIndex(dataDir, new TextFileFilter(),articles);
+		numIndexed = indexer.editIndex(LuceneConstants.DATA_DIR, new TextFileFilter(),articles);
 			long endTime = System.currentTimeMillis();		
 		indexer.close();
 			System.out.println("\n"+numIndexed + " File(s) indexed, time taken: " + (endTime-startTime)+" ms");
 	}
 
-	private void search(String searchQuery) throws IOException, ParseException 
-	{
-		searcher = new Searcher(indexDir);
+	private void createIndex() throws IOException {
+		indexer = new Indexer(LuceneConstants.INDEX_DIR);
+		int numIndexed;
+		long startTime = System.currentTimeMillis();
+
+		numIndexed = indexer.createIndex(LuceneConstants.DATA_DIR, new TextFileFilter());
+		long endTime = System.currentTimeMillis();
+		indexer.close();
+		System.out.println("\n"+numIndexed + " File(s) indexed, time taken: " + (endTime-startTime)+" ms");
+	}
+
+	private void search(String searchQuery) throws IOException, ParseException {
+		searcher = new Searcher(LuceneConstants.INDEX_DIR);
 		long startTime = System.currentTimeMillis();
 		TopDocs hits = searcher.search(searchQuery);
 		long endTime = System.currentTimeMillis();
@@ -178,7 +196,7 @@ public class LuceneTester {
 	}
 
 	static long numberOfFiles() throws IOException {
-		try (Stream<Path> files = Files.list(Paths.get("C:\\Users\\johnb\\eclipse-workspace\\Search-Engine-TReSA\\Data"))) {
+		try (Stream<Path> files = Files.list(Paths.get(LuceneConstants.DATA_DIR))) {
 		    return files.count();
 		}
 	}

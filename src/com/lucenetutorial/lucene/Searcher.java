@@ -45,4 +45,5 @@ public class Searcher {
 		indexReader.close();
 		indexDirectory.close();
 	}
+
 }

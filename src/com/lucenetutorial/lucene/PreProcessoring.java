@@ -8,7 +8,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PreProcessoring{
-
 	
 	protected String preProcessing(String preProcessedContent) {
 		// Removing <Places>, <People>, <Title> and <Body>
@@ -28,8 +27,7 @@ public class PreProcessoring{
 		
 		return preProcessedContent;
 	}
-	
-	
+
 	private String removingStopwords(String preProcessedContent) {
 	    Pattern p = Pattern.compile("\\b(I|this|its|i|ii|iii|vi|iv|x|v|y.....)\\b\\s?");
 	    Matcher m = p.matcher(preProcessedContent);

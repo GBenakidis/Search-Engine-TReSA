@@ -16,7 +16,7 @@ public class DeleteDocuments {
 	IndexWriter writer;
 	
 	public void deleteSpecificDocs(ArrayList<String> documents) throws IOException {
-		Path path = Paths.get("D:\\works\\Search-Engine-TReSA\\Index");
+		Path path = Paths.get(LuceneConstants.INDEX_DIR);
      	Directory directory = FSDirectory.open(path);
      	IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());
 		writer = new IndexWriter(directory,config);
@@ -28,6 +28,7 @@ public class DeleteDocuments {
 		   System.out.println("index contains documents: ");
 		   writer.close();
 	}
+
 	public boolean checkIfDocumentExits() {
 		return true;
 	}
