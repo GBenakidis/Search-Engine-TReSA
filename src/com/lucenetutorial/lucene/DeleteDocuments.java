@@ -24,16 +24,14 @@ public class DeleteDocuments {
 			writer.deleteDocuments(new Term(LuceneConstants.FILE_NAME,article));
 			writer.commit();
 		}
-		System.out.println("index contains deleted files: "+writer.hasDeletions());
-		   System.out.println("index contains documents: ");
-		   writer.close();
+		
+		System.out.println("Index contains deleted files: "+writer.hasDeletions());
+	    System.out.println("Index contains documents: ");
+	    writer.close();
 	}
 
 	public boolean checkIfDocumentExits() {
 		return true;
 	}
 	
-    private boolean checkifSpecificDocExist(String doc) {
-    	return true;
-    }
 }

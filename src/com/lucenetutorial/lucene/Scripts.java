@@ -5,14 +5,14 @@ import java.io.IOException;
 public class Scripts {
 	static void Script(int choise) throws IOException {
 		if(choise == 1) {
-			System.out.println("\n\nKALOSORISES STO TADE\nEXEIS TIS EPILOGES PARAKATW:");
-			System.out.println("1. Plirofories gia to Data directory\n2. Dimiourgia h enhmerwsh euretiriou\n3. Anazhthsh leksis\n4. Exit");
+			System.out.println("\n\nKALOSORISES STHN TReSA\n\nOI EPILOGES SOU EINAI:");
+			System.out.println("1. Plithos arxeiwn sto Data Dir\n2. Dimiourgia h enhmerwsh euretiriou\n3. Anazhthsh leksis\n4. Exit");
 		}
 		else if(choise == 2) {
 			System.out.println("\n\nIparxoyn sinolika: " + LuceneTester.numberOfFiles() + " arxeia");
 		}
 		else if(choise == 3) {
-			System.out.println("\nBye!");
+			System.out.println("\nHave a nice day!");
 		}
 		else if(choise == 4) {
 			System.out.println("\n\nLathos kwdikos");
@@ -44,7 +44,31 @@ public class Scripts {
 		else if(choise == 13) {
 			System.out.println("\nGrapse thn leksi pou thes na breis:");
 		}
+		else if(choise == 14) {
+			System.out.println("\n\nEpelekse:\n1. Dimiourgia/Epanadimioiurgia index\n2. Eisagwgh arxeioy\n3. Diagrafh arxeioy\n4. Back");
+		}
+		else if(choise == 15) {
+			System.out.println("Epelekse kapoio arxeio px Article8.txt Article10.txt:\n");
+		}
+		else if(choise == 16) {
+			System.out.println("\nTa arxeia mesa sto DataDir einai:\n");
+		}
+		else if(choise == 17) {
+			System.out.println("\nThes o Index na einai apo tin arxi:\n1. Gematos(ola ta arxeia tou Dir Data)\n2. Adeios\n");
+		}
 
 	}
 	
+	static void ScriptWithString(int choise, String s) {
+		if(choise == 1) {
+			System.out.println("Incorrect file name: "+ s);
+		}
+		if(choise == 2) {
+			System.out.println("Eisixthike to arxeio noume "+s + " !!");
+		}
+	}
+	
+	static void ScriptWithNum(int choise, int i) {
+		// empty
+	}
 }

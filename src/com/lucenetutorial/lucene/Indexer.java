@@ -1,17 +1,12 @@
 package com.lucenetutorial.lucene;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -19,26 +14,17 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.index.Term;
-import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import java.io.FilenameFilter;
+
 public class Indexer extends PreProcessoring{
 	private IndexWriter writer;
 	
 	public Indexer(String indexDirectoryPath) throws IOException  {
 		// This directory will contain the indexes
 		Path indexPath = Paths.get(indexDirectoryPath);
-		
-		//deleteCreateIndex(indexDirectoryPath, indexPath);
-		
-		
 		if(!Files.exists(indexPath)) {
 			 Files.createDirectory(indexPath);
 		 }
@@ -80,31 +66,30 @@ public class Indexer extends PreProcessoring{
 	
 	public int editIndex(String dataDirPath, FileFilter filter, ArrayList<String> articles) throws IOException {
 		// Get all files in the data directory
-
-		int i=0;
 		File[] files = new File(dataDirPath).listFiles();
 		for (File file : files) {
 			if(!file.isDirectory() && !file.isHidden() && file.exists() && file.canRead() && filter.accept(file) ){			
-				
-					for(String str:articles) {
-						if(file.getName().contains(str)) {				        	
-							indexFile(file);
-							articles.remove(str);
-							break;
-				        }
-					}
+				for(String str:articles) {
+					if(file.getName().contains(str)) {				        	
+						indexFile(file);
+						articles.remove(str);
+						break;
+			        }
+				}
 			}
 		}
 		
 		return writer.numRamDocs();
 	}
 
-	public int createIndex(String dataDirPath, FileFilter filter) throws IOException {
+	public int createIndex(String dataDirPath, FileFilter filter, int i) throws IOException {
 		// Get all files in the data directory
 		File[] files = new File(dataDirPath).listFiles();
-		for (File file : files) {
-			if(!file.isDirectory() && !file.isHidden() && file.exists() && file.canRead() && filter.accept(file) ){
-				indexFile(file);
+		if(i == 1) {
+			for (File file : files) {
+				if(!file.isDirectory() && !file.isHidden() && file.exists() && file.canRead() && filter.accept(file) ){
+					indexFile(file);
+				}
 			}
 		}
 
@@ -134,6 +119,4 @@ public class Indexer extends PreProcessoring{
 		writer.close();
 	}
 	
-	
-
 }

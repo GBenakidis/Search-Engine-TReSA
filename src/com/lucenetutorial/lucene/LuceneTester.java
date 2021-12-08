@@ -27,7 +27,6 @@ public class LuceneTester {
 
 	public static void main(String[] args) {
 		Boolean exit = false;
-		System.out.println("\n\n\nREEEEEEEEEEEEEEEEE\n\n\n");
 		do {
 			try {
 				Scripts.Script(1);
@@ -37,18 +36,20 @@ public class LuceneTester {
 					  Scripts.Script(2);
 				    break;
 				  case 2:
-						System.out.println("\n\nEpelekse:\n1. Dimiourgia/Epanadimioiurgia index\n2. Eisagwgh arxeioy\n3. Diagrafh arxeioy\n");
-						switch(input.nextInt()) {
-							case 1:
-								caseOption2(1);
-								break;
-							case 2:
-								caseOption2(2);
-								break;
-							case 3:
-								caseOption2(3);
-								break;
-						}
+					  Scripts.Script(14);
+					  switch(input.nextInt()) {
+						  case 1:
+							  caseOption2(1);
+							 break;
+						  case 2:
+							  caseOption2(2);
+							 break;
+						  case 3:
+							  caseOption2(3);
+							 break;
+						  case 4:
+							 break;
+					  }
 		
 				    break;
 				  case 3:
@@ -72,56 +73,45 @@ public class LuceneTester {
 		
 	}
 
-	public boolean checkTheName(String articles) {
-		String[] arr = articles.split(" ");
-		for(String str : arr) {
-			if(str.startsWith("Article")&&str.endsWith(".txt")) {
-				String num = str.replace("Article", "");
-				num = num.replace(".txt", "");
-				System.out.println("ffdfdfsdfsdfsd "+num);
-			    try {
-			        int d = Integer.parseInt(num);
-			    } catch (NumberFormatException nfe) {
-			        return false;
-			    }
-			    return true;
-			}else {
-				return false;
-			}
-		}
-		return true;
-	}
-
 	public static void caseOption2(int choice) throws IOException, ParseException {
 		LuceneTester tester = new LuceneTester();
-		int i=0;
-		File[] files = new File(LuceneConstants.DATA_DIR).listFiles();
-	    for (File file : files) 	
-			System.out.println("File "+(i++)+": "+file.getName());
-
+		
+		Scanner input = new Scanner(System.in);
+		
 		if(choice==1){
-			tester.createIndex();
-			Scripts.Script(12);
+			Scripts.Script(17);
+			int c = input.nextInt();
+			if(c==1) {
+				tester.createIndex(1);
+				Scripts.Script(12);
+			}else if(c==2) {
+				tester.createIndex(2);
+				Scripts.Script(12);
+			}else {
+				Scripts.Script(4);
+			}
+			
 		}else if(choice==2) {
-			System.out.println("Epelekse kapoio arxeio px Article8.txt Article10.txt\n");
-			Scanner input = new Scanner(System.in);
+			allDataDirFiles();
+			Scripts.Script(15);
+			//Scanner input = new Scanner(System.in);
 			String articles = input.nextLine();
-						
 			ArrayList<String> art = new ArrayList<String>();
 			String[] a = articles.split(" ");
 			for(String str : a) {
 				if(tester.checkTheName(str)) {
 					art.add(str);
 				}else {
-					System.out.println("Incorrect file name: "+ str);
+					Scripts.ScriptWithString(1,str);
 				}
 				
 			}
 			if(!art.isEmpty())
 				tester.editIndex(art);
 		}else if(choice==3){
-			System.out.println("Epelekse kapoio arxeio px Article8.txt Article10.txt\n");
-			Scanner input = new Scanner(System.in);
+			allDataDirFiles();
+			Scripts.Script(15);
+			//Scanner input = new Scanner(System.in);
 			String articles = input.nextLine();
 			ArrayList<String> art = new ArrayList<String>();
 			String[] a = articles.split(" ");
@@ -129,7 +119,7 @@ public class LuceneTester {
 				if(tester.checkTheName(str)) {
 					art.add(str);
 				}else {
-					System.out.println("Incorrect file name: "+ str);
+					Scripts.ScriptWithString(1,str);
 				}
 			}
 			if(!art.isEmpty()) {
@@ -141,15 +131,7 @@ public class LuceneTester {
 			Scripts.Script(4);
 		}
 	}
-
-	public void documents() throws IOException {
-		Path path = Paths.get(LuceneConstants.INDEX_DIR);
-     	Directory directory = FSDirectory.open(path);
-     	IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());
-		writer = new IndexWriter(directory,config);
-		System.out.println(writer.getDocStats());
-	}
-
+	
 	public static void caseOption3(Scanner input) throws IOException, ParseException {
 		LuceneTester tester = new LuceneTester();
 		Scripts.Script(13);
@@ -169,15 +151,15 @@ public class LuceneTester {
 			System.out.println("\n"+numIndexed + " File(s) indexed, time taken: " + (endTime-startTime)+" ms");
 	}
 
-	private void createIndex() throws IOException {
+	private void createIndex(int i) throws IOException {
 		indexer = new Indexer(LuceneConstants.INDEX_DIR);
 		int numIndexed;
 		long startTime = System.currentTimeMillis();
 
-		numIndexed = indexer.createIndex(LuceneConstants.DATA_DIR, new TextFileFilter());
+		numIndexed = indexer.createIndex(LuceneConstants.DATA_DIR, new TextFileFilter(), i);
 		long endTime = System.currentTimeMillis();
 		indexer.close();
-		System.out.println("\n"+numIndexed + " File(s) indexed, time taken: " + (endTime-startTime)+" ms");
+		 System.out.println("\n"+numIndexed + " File(s) indexed, time taken: " + (endTime-startTime)+" ms");
 	}
 
 	private void search(String searchQuery) throws IOException, ParseException {
@@ -201,4 +183,39 @@ public class LuceneTester {
 		}
 	}
 
+	public boolean checkTheName(String articles) {
+		String[] arr = articles.split(" ");
+		for(String str : arr) {
+			if(str.startsWith("Article") && str.endsWith(".txt")) {
+				String num = str.replace("Article", "");
+				num = num.replace(".txt", "");
+				Scripts.ScriptWithString(1,num);
+			    try {
+			        int d = Integer.parseInt(num);
+			    } catch (NumberFormatException nfe) {
+			        return false;
+			    }
+			    return true;
+			}else {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public void documents() throws IOException {
+		Path path = Paths.get(LuceneConstants.INDEX_DIR);
+     	Directory directory = FSDirectory.open(path);
+     	IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());
+		writer = new IndexWriter(directory,config);
+		System.out.println(writer.getDocStats());
+	}
+	
+	public static void allDataDirFiles() throws IOException {
+		Scripts.Script(16);
+		int i=0;
+		File[] files = new File(LuceneConstants.DATA_DIR).listFiles();
+	    for (File file : files) 	
+			System.out.println("File "+(i++)+": "+file.getName());
+	}
 }
