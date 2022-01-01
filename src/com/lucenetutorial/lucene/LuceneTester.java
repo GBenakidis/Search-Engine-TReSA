@@ -23,50 +23,40 @@ import org.apache.lucene.store.FSDirectory;
 public class LuceneTester {
 	Indexer indexer;
 	Searcher searcher;
-	private IndexWriter writer;
 
 	public static void main(String[] args) {
-		Boolean exit = false;
+		boolean exit = false;
 		do {
 			try {
 				Scripts.Script(1);
 				Scanner input = new Scanner(System.in);
-				switch(input.nextInt()) {
-				  case 1:
-					  Scripts.Script(2);
-				    break;
-				  case 2:
-					  Scripts.Script(14);
-					  switch(input.nextInt()) {
-						  case 1:
-							  caseOption2(1);
-							 break;
-						  case 2:
-							  caseOption2(2);
-							 break;
-						  case 3:
-							  caseOption2(3);
-							 break;
-						  case 4:
-							 break;
-					  }
-		
-				    break;
-				  case 3:
-					  caseOption3(input);
-				    break;
-				  case 4:
-					  exit = !exit;
-					  Scripts.Script(3);
-					break;
-				  default:
-					  Scripts.Script(4);
+				switch (input.nextInt()) {
+					case 1 -> Scripts.Script(2);
+					case 2 -> {
+						Scripts.Script(14);
+						switch (input.nextInt()) {
+							case 1:
+								caseOption2(1);
+								break;
+							case 2:
+								caseOption2(2);
+								break;
+							case 3:
+								caseOption2(3);
+								break;
+							case 4:
+								break;
+						}
+					}
+					case 3 -> caseOption3(input);
+					case 4 -> {
+						exit = true;
+						Scripts.Script(3);
+					}
+					default -> Scripts.Script(4);
 				}
 			}
-			catch (IOException e) {
-				e.printStackTrace();
-			} 
-			catch (ParseException e) {
+			catch (IOException | ParseException e) {
 				e.printStackTrace();
 			}
 		}while(!exit);
@@ -96,7 +86,7 @@ public class LuceneTester {
 			Scripts.Script(15);
 			//Scanner input = new Scanner(System.in);
 			String articles = input.nextLine();
-			ArrayList<String> art = new ArrayList<String>();
+			ArrayList<String> art = new ArrayList<>();
 			String[] a = articles.split(" ");
 			for(String str : a) {
 				if(tester.checkTheName(str)) {
@@ -113,7 +103,7 @@ public class LuceneTester {
 			Scripts.Script(15);
 			//Scanner input = new Scanner(System.in);
 			String articles = input.nextLine();
-			ArrayList<String> art = new ArrayList<String>();
+			ArrayList<String> art = new ArrayList<>();
 			String[] a = articles.split(" ");
 			for(String str : a) {
 				if(tester.checkTheName(str)) {
@@ -134,21 +124,22 @@ public class LuceneTester {
 	
 	public static void caseOption3(Scanner input) throws IOException, ParseException {
 		LuceneTester tester = new LuceneTester();
-		Scripts.Script(13);
+		Scripts.Script(18);
 		input.nextLine(); // clear keyboard
-		String wordSearching = input.nextLine();
+		int choice = input.nextInt();
 		
-		tester.search(wordSearching);
+		tester.search(choice, input);
 	}
 	
 	private void editIndex(ArrayList<String> articles) throws IOException {
 		indexer = new Indexer(LuceneConstants.INDEX_DIR);
 		int numIndexed;
-			long startTime = System.currentTimeMillis();		
+		long startTime = System.currentTimeMillis();		
+		
 		numIndexed = indexer.editIndex(LuceneConstants.DATA_DIR, new TextFileFilter(),articles);
-			long endTime = System.currentTimeMillis();		
+		long endTime = System.currentTimeMillis();		
 		indexer.close();
-			System.out.println("\n"+numIndexed + " File(s) indexed, time taken: " + (endTime-startTime)+" ms");
+		System.out.println("\n"+numIndexed + " File(s) indexed, time taken: " + (endTime-startTime)+" ms");
 	}
 
 	private void createIndex(int i) throws IOException {
@@ -162,10 +153,25 @@ public class LuceneTester {
 		 System.out.println("\n"+numIndexed + " File(s) indexed, time taken: " + (endTime-startTime)+" ms");
 	}
 
-	private void search(String searchQuery) throws IOException, ParseException {
+	private void search(int choice, Scanner input) throws IOException, ParseException {
 		searcher = new Searcher(LuceneConstants.INDEX_DIR);
-		long startTime = System.currentTimeMillis();
-		TopDocs hits = searcher.search(searchQuery);
+		long startTime = 0;
+		TopDocs hits=null;
+		switch (choice) {
+			case 1 -> {
+				startTime = System.currentTimeMillis();
+				hits = searcher.search(1, input);
+			}
+			case 2 -> {
+				startTime = System.currentTimeMillis();
+				hits = searcher.search(2, input);
+			}
+			case 3 -> {
+				startTime = System.currentTimeMillis();
+				hits = searcher.search(3, input);
+			}
+		}
+
 		long endTime = System.currentTimeMillis();
 		
 		System.out.println("\n"+hits.totalHits +" documents found. Time :" + (endTime - startTime) + " ms");
@@ -173,6 +179,7 @@ public class LuceneTester {
 			Document doc = searcher.getDocument(scoreDoc);
 			System.out.println("File: " + doc.get(LuceneConstants.FILE_PATH));
 		}
+		
 		
 		searcher.close();
 	}
@@ -207,7 +214,7 @@ public class LuceneTester {
 		Path path = Paths.get(LuceneConstants.INDEX_DIR);
      	Directory directory = FSDirectory.open(path);
      	IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());
-		writer = new IndexWriter(directory,config);
+		IndexWriter writer = new IndexWriter(directory, config);
 		System.out.println(writer.getDocStats());
 	}
 	
@@ -218,4 +225,5 @@ public class LuceneTester {
 	    for (File file : files) 	
 			System.out.println("File "+(i++)+": "+file.getName());
 	}
+
 }

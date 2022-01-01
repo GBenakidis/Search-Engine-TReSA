@@ -56,7 +56,14 @@ public class Scripts {
 		else if(choise == 17) {
 			System.out.println("\nThes o Index na einai apo tin arxi:\n1. Gematos(ola ta arxeia tou Dir Data)\n2. Adeios\n");
 		}
-
+		else if(choise == 18) {
+			System.out.println("\nEidos anazhthshs:\n1. Query Parser\n2. Boolean Query\n3. Phrase Query");
+		}
+		else if(choise == 19) {
+			System.out.println("\nGia na ginei swsta to Boolean Model prepei na grafeis:\nKsexarismos me parenthesis anamesa stis " + 
+							   "logikes prakseis\n&& <- AND\n|| <- OR\n^ <- NOT\n\n");
+		}
+		
 	}
 	
 	static void ScriptWithString(int choise, String s) {

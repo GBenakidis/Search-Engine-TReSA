@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -20,14 +21,14 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
 public class Indexer extends PreProcessoring{
-	private IndexWriter writer;
+	private final IndexWriter writer;
 	
 	public Indexer(String indexDirectoryPath) throws IOException  {
 		// This directory will contain the indexes
 		Path indexPath = Paths.get(indexDirectoryPath);
 		if(!Files.exists(indexPath)) {
 			 Files.createDirectory(indexPath);
-		 }
+		}
 		Directory indexDirectory = FSDirectory.open(indexPath);
 		// Create the indexer
 		IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());
@@ -43,15 +44,10 @@ public class Indexer extends PreProcessoring{
 		// Index file path
 		Field filePathField = new Field(LuceneConstants.FILE_PATH, file.getCanonicalPath(), StringField.TYPE_STORED);
 		
-		String preProcessed = contentTaker(file);
+		// Index content
+		// Processing contents of article and addition to document
+		document = preProcessing(document, file);
 		
-		// Pre-processing
-		String postProcessing = preProcessing(preProcessed);
-		
-		// Index file contents
-		Field contentField = new Field(LuceneConstants.CONTENTS, postProcessing, TextField.TYPE_STORED);
-
-		document.add(contentField);
 		document.add(fileNameField);
 		document.add(filePathField);
 		
@@ -61,6 +57,10 @@ public class Indexer extends PreProcessoring{
 	private void indexFile(File file) throws IOException {
 		System.out.println("Indexing " + file.getCanonicalPath());
 		Document document = getDocument(file);
+		
+		System.out.println(document.getFields());
+		
+		// TEXTFIELD MAIN ERROR
 		writer.addDocument(document);
 	}
 	
@@ -68,9 +68,9 @@ public class Indexer extends PreProcessoring{
 		// Get all files in the data directory
 		File[] files = new File(dataDirPath).listFiles();
 		for (File file : files) {
-			if(!file.isDirectory() && !file.isHidden() && file.exists() && file.canRead() && filter.accept(file) ){			
+			if(!file.isDirectory() && !file.isHidden() && file.exists() && file.canRead() && filter.accept(file) ){
 				for(String str:articles) {
-					if(file.getName().contains(str)) {				        	
+					if(file.getName().contains(str)) {
 						indexFile(file);
 						articles.remove(str);
 						break;
@@ -90,32 +90,15 @@ public class Indexer extends PreProcessoring{
 				if(!file.isDirectory() && !file.isHidden() && file.exists() && file.canRead() && filter.accept(file) ){
 					indexFile(file);
 				}
+				
 			}
+			
 		}
 
 		return writer.numRamDocs();
 	}
-	
-	public static void recursiveDelete(File file) {
-		// https://www.journaldev.com/833/java-delete-directory-folder
-		
-        //to end the recursive loop
-        if (!file.exists())
-            return;
-        
-        //if directory, go inside and call recursively
-        if (file.isDirectory()) {
-            for (File f : file.listFiles()) {
-                //call recursively
-                recursiveDelete(f);
-            }
-        }
-        //call delete to delete files and empty directory
-        file.delete();
-        System.out.println("Deleted file/folder: "+file.getAbsolutePath());
-    }
 
-	public void close() throws CorruptIndexException, IOException {
+	public void close() throws IOException {
 		writer.close();
 	}
 	
