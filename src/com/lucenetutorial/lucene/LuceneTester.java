@@ -80,7 +80,6 @@ public class LuceneTester {
 			}else {
 				Scripts.Script(4);
 			}
-			
 		}else if(choice==2) {
 			allDataDirFiles();
 			Scripts.Script(15);

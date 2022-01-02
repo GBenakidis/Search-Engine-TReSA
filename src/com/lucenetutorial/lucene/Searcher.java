@@ -91,7 +91,6 @@ public class Searcher {
 						}
 					}
 				}
-
 				return indexSearcher.search(booleanQuery.build(), LuceneConstants.MAX_SEARCH);
 			}
 			case 3 -> {
@@ -103,7 +102,6 @@ public class Searcher {
 				return indexSearcher.search(phraseQuery.build(), LuceneConstants.MAX_SEARCH);
 			}
 		}
-		
 		return null;
 	}
 	

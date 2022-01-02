@@ -56,12 +56,7 @@ public class Indexer extends PreProcessoring{
 
 	private void indexFile(File file) throws IOException {
 		System.out.println("Indexing " + file.getCanonicalPath());
-		Document document = getDocument(file);
-		
-		System.out.println(document.getFields());
-		
-		// TEXTFIELD MAIN ERROR
-		writer.addDocument(document);
+		writer.addDocument(getDocument(file));
 	}
 	
 	public int editIndex(String dataDirPath, FileFilter filter, ArrayList<String> articles) throws IOException {
