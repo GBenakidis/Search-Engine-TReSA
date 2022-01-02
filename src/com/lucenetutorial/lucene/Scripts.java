@@ -57,25 +57,21 @@ public class Scripts {
 			System.out.println("\nThes o Index na einai apo tin arxi:\n1. Gematos(ola ta arxeia tou Dir Data)\n2. Adeios\n");
 		}
 		else if(choise == 18) {
-			System.out.println("\nEidos anazhthshs:\n1. Query Parser\n2. Boolean Query\n3. Phrase Query");
+			System.out.println("\nEidos anazhthshs:\n1. Query Parser\n2. Boolean Query\n3. Phrase Query\n4. Query Filter\n");
 		}
 		else if(choise == 19) {
 			System.out.println("\nGia na ginei swsta to Boolean Model prepei na grafeis:\nKsexarismos me parenthesis anamesa stis " + 
 							   "logikes prakseis\n&& <- AND\n|| <- OR\n^ <- NOT\n\n");
 		}
-		
+		else if(choise == 20) {
+			System.out.println("\nDialekse se ti pedio thes na ginei h anazhthsh:" +
+					           "\n1. Places\n2. People\n3. Title\n4. Body");
+		}
+
 	}
 	
-	static void ScriptWithString(int choise, String s) {
-		if(choise == 1) {
-			System.out.println("Incorrect file name: "+ s);
-		}
-		if(choise == 2) {
-			System.out.println("Eisixthike to arxeio noume "+s + " !!");
-		}
+	static void ScriptWithString(String s) {
+		System.out.println("Incorrect file name: " + s);
 	}
-	
-	static void ScriptWithNum(int choise, int i) {
-		// empty
-	}
+
 }

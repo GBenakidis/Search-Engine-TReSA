@@ -47,7 +47,6 @@ public class Searcher {
 		if(choice == 2 ) { Scripts.Script(19); }
 		input.nextLine();
 		String searchQuery = input.nextLine();
-
 		switch (choice) {
 			case 1 -> {
 				QueryParser queryParser = new QueryParser(LuceneConstants.CONTENTS, new StandardAnalyzer());
@@ -100,6 +99,27 @@ public class Searcher {
 					phraseQuery.add(new Term(LuceneConstants.CONTENTS, s));
 				}
 				return indexSearcher.search(phraseQuery.build(), LuceneConstants.MAX_SEARCH);
+			}
+			case 4 ->{
+				Scripts.Script(20);
+				choice = input.nextInt();
+				QueryParser queryParser;
+				if (choice == 1) {
+					queryParser = new QueryParser(LuceneConstants.PLACES, new StandardAnalyzer());
+				} else if (choice == 2) {
+					queryParser = new QueryParser(LuceneConstants.PEOPLE, new StandardAnalyzer());
+				} else if (choice == 3) {
+					// Doesn't work with LuceneConstants.TITLE
+					queryParser = new QueryParser(LuceneConstants.CONTENTS, new StandardAnalyzer());
+				} else if (choice == 4) {
+					// Doesn't work with LuceneConstants.BODY
+					queryParser = new QueryParser(LuceneConstants.CONTENTS, new StandardAnalyzer());
+				} else {
+					throw new IllegalStateException("Unexpected value: " + choice);
+				}
+				query = queryParser.parse(searchQuery);
+				System.out.println("query: " + query.toString());
+				return indexSearcher.search(query, LuceneConstants.MAX_SEARCH);
 			}
 		}
 		return null;
