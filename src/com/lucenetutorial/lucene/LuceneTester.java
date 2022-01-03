@@ -10,15 +10,10 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
 
 public class LuceneTester {
 	Indexer indexer;
@@ -49,7 +44,8 @@ public class LuceneTester {
 						}
 					}
 					case 3 -> caseOption3(input);
-					case 4 -> {
+					case 4 -> caseOption4(input);
+					case 5 -> {
 						exit = true;
 						Scripts.Script(3);
 					}
@@ -126,8 +122,12 @@ public class LuceneTester {
 		Scripts.Script(18);
 		input.nextLine(); // clear keyboard
 		int choice = input.nextInt();
-		
 		tester.search(choice, input);
+	}
+
+	public static void caseOption4(Scanner input) throws IOException, ParseException {
+		LuceneTester tester = new LuceneTester();
+		tester.search(5, input);
 	}
 	
 	private void editIndex(ArrayList<String> articles) throws IOException {
@@ -154,6 +154,7 @@ public class LuceneTester {
 
 	private void search(int choice, Scanner input) throws IOException, ParseException {
 		searcher = new Searcher(LuceneConstants.INDEX_DIR);
+		boolean articleComp = false;
 		long startTime = System.currentTimeMillis();
 		TopDocs hits;
 		if (choice == 1) {
@@ -164,15 +165,38 @@ public class LuceneTester {
 			hits = searcher.search(3, input);
 		} else if (choice == 4) {
 			hits = searcher.search(4, input);
+		} else if (choice == 5) {
+			hits = searcher.search(5, input);
+			articleComp = true;
 		} else {
 			throw new IllegalStateException("Unexpected value: " + choice);
 		}
 		long endTime = System.currentTimeMillis();
-		
-		System.out.println("\n"+hits.totalHits +" documents found. Time :" + (endTime - startTime) + " ms");
-		for(ScoreDoc scoreDoc : hits.scoreDocs) {
-			Document doc = searcher.getDocument(scoreDoc);
-			System.out.println("File: " + doc.get(LuceneConstants.FILE_PATH));
+		if(hits != null){
+			System.out.println("\n" + hits.totalHits + " documents found. Time :" + (endTime - startTime) + " ms\n");
+
+			if(articleComp) {
+				int n = 0;
+				for (ScoreDoc scoreDoc : hits.scoreDocs) {
+					if (n == 0) {
+						n++;
+						continue;
+					}
+					Document doc = searcher.getDocument(scoreDoc);
+					System.out.println(n + ". " + doc.get(LuceneConstants.FILE_NAME) + " with score " + scoreDoc.score);
+					n++;
+				}
+			}
+			else{
+				for(ScoreDoc scoreDoc : hits.scoreDocs) {
+					Document doc = searcher.getDocument(scoreDoc);
+					System.out.println("File: " + doc.get(LuceneConstants.FILE_PATH));
+				}
+
+			}
+		}
+		else{
+			Scripts.Script(23);
 		}
 		
 		
@@ -205,14 +229,6 @@ public class LuceneTester {
 		return true;
 	}
 
-	public void documents() throws IOException {
-		Path path = Paths.get(LuceneConstants.INDEX_DIR);
-     	Directory directory = FSDirectory.open(path);
-     	IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());
-		IndexWriter writer = new IndexWriter(directory, config);
-		System.out.println(writer.getDocStats());
-	}
-	
 	public static void allDataDirFiles() throws IOException {
 		Scripts.Script(16);
 		int i=0;

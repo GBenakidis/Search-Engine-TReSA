@@ -3,26 +3,13 @@ package com.lucenetutorial.lucene;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
-import org.apache.lucene.search.BooleanClause;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.PhraseQuery;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.TextField;
-import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
@@ -43,10 +30,12 @@ public class Searcher {
 	}
 	
 	public TopDocs search(int choice, Scanner input) throws IOException, ParseException {
-		Scripts.Script(13);
+		if(choice!=5)Scripts.Script(13);
+		else Scripts.Script(21);
 		if(choice == 2 ) { Scripts.Script(19); }
 		input.nextLine();
 		String searchQuery = input.nextLine();
+
 		switch (choice) {
 			case 1 -> {
 				QueryParser queryParser = new QueryParser(LuceneConstants.CONTENTS, new StandardAnalyzer());
@@ -100,7 +89,7 @@ public class Searcher {
 				}
 				return indexSearcher.search(phraseQuery.build(), LuceneConstants.MAX_SEARCH);
 			}
-			case 4 ->{
+			case 4 -> {
 				Scripts.Script(20);
 				choice = input.nextInt();
 				QueryParser queryParser;
@@ -121,6 +110,21 @@ public class Searcher {
 				System.out.println("query: " + query.toString());
 				return indexSearcher.search(query, LuceneConstants.MAX_SEARCH);
 			}
+			case 5 -> {
+				if (checkExistanceOfFile(searchQuery, input)){
+					QueryParser queryParser = new QueryParser(LuceneConstants.CONTENTS, new StandardAnalyzer());
+					// SearchQuery should become LuceneConstants.CONTENTS of the file we searched
+					// (file name is inside searchQuery variable)
+
+					// Take LuceneConstants.CONTENTS of [filename].txt from Index
+					String documentContents = documentContext(searchQuery);
+					query = queryParser.parse(documentContents);
+					return indexSearcher.search(query, LuceneConstants.MAX_SEARCH);
+				}
+				else{
+					Scripts.Script(22);
+				}
+			}
 		}
 		return null;
 	}
@@ -139,4 +143,31 @@ public class Searcher {
 		return Arrays.asList(str);
 	}
 
+	public String documentContext(String searchQuery) throws IOException {
+		Set<String> h = new HashSet<>() {{ add(LuceneConstants.CONTENTS); }};
+		ArrayList<String> fileNumbers = new ArrayList<>();
+		for(int i=0 ; i<LuceneTester.numberOfFiles() ; i++){
+			String s=String.valueOf(i);
+			fileNumbers.add(s);
+		}
+		Collections.sort(fileNumbers);
+		int positionInsideIndex=0;
+		searchQuery = searchQuery.replace("Article","");
+		for (String a: fileNumbers) {
+			if(a.equals(searchQuery)) { break; }
+			positionInsideIndex++;
+		}
+		Document documentSearched = indexReader.document(positionInsideIndex,h);
+		return documentSearched.toString();
+	}
+
+	public boolean checkExistanceOfFile(String searchQuery, Scanner input) throws IOException {
+		PhraseQuery.Builder phraseQuery = new PhraseQuery.Builder();
+		List<String> arraySearchQueryPhrase = stringToArrayList(searchQuery+".txt");
+		for (String s : arraySearchQueryPhrase) {
+			phraseQuery.add(new Term(LuceneConstants.FILE_NAME, s));
+		}
+		TopDocs hits = indexSearcher.search(phraseQuery.build(), LuceneConstants.MAX_SEARCH);
+		return !hits.totalHits.toString().contains("0");
+	}
 }

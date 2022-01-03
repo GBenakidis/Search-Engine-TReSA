@@ -5,67 +5,77 @@ import java.io.IOException;
 public class Scripts {
 	static void Script(int choise) throws IOException {
 		if(choise == 1) {
-			System.out.println("\n\nKALOSORISES STHN TReSA\n\nOI EPILOGES SOU EINAI:");
-			System.out.println("1. Plithos arxeiwn sto Data Dir\n2. Dimiourgia h enhmerwsh euretiriou\n3. Anazhthsh leksis\n4. Exit");
+			System.out.println("\n\nWELCOME TO TReSA\n\nYOUR CHOICES ARE:");
+			System.out.println("1. Number of articles at Data dir\n2. Create or update Index\n3. Search for " +
+					           "a word or a phrase\n4. Article relation\n5. Exit");
 		}
 		else if(choise == 2) {
-			System.out.println("\n\nIparxoyn sinolika: " + LuceneTester.numberOfFiles() + " arxeia");
+			System.out.println("\n\nThere are: " + LuceneTester.numberOfFiles() + " articles");
 		}
 		else if(choise == 3) {
 			System.out.println("\nHave a nice day!");
 		}
 		else if(choise == 4) {
-			System.out.println("\n\nLathos kwdikos");
+			System.out.println("\n\nWrong number choice");
 		}
 		else if(choise == 5) {
-			System.out.println("\n\nTo arxeio sou dimiourgithike");
+			System.out.println("\n\nYour article is created");
 		}
 		else if(choise == 6) {
-			System.out.println("\nSe poia xwra exei graftei:");
+			System.out.println("\nIn which country has be written:");
 		}
 		else if(choise == 7) {
-			System.out.println("\nApo poious exei graftei[mporeis na to afhseis kai keno]:");
+			System.out.println("\nFrom whom [can be empty]:");
 		}
 		else if(choise == 8) {
-			System.out.println("\nPoios einai o titlos tous arthrou:");
+			System.out.println("\nThe title of the article:");
 		}
 		else if(choise == 9) {
-			System.out.println("\nPoia einai ta periexomena tou arthrou:");
+			System.out.println("\nWhat is the context:");
 		}
 		else if(choise == 10) {
-			System.out.println("\nPoion arithmo arxeiou thes na diagrapseis:");
+			System.out.println("\nWhat number has the article you want to delete:");
 		}
 		else if(choise == 11) {
-			System.out.println("\nTi theleis na kanei:");
+			System.out.println("\nYour options are:");
 		}
 		else if(choise == 12) {
-			System.out.println("\nTo euretirio dimiourgithike!");
+			System.out.println("\nIndex has been created!");
 		}
 		else if(choise == 13) {
-			System.out.println("\nGrapse thn leksi pou thes na breis:");
+			System.out.println("\nWrite what you want to find:");
 		}
 		else if(choise == 14) {
-			System.out.println("\n\nEpelekse:\n1. Dimiourgia/Epanadimioiurgia index\n2. Eisagwgh arxeioy\n3. Diagrafh arxeioy\n4. Back");
+			System.out.println("\n\nChoose:\n1. Create/Recreate index\n2. Insert article\n3. Delete article\n4. Back");
 		}
 		else if(choise == 15) {
-			System.out.println("Epelekse kapoio arxeio px Article8.txt Article10.txt:\n");
+			System.out.println("Choose an article (Example format: Article8.txt):\n");
 		}
 		else if(choise == 16) {
-			System.out.println("\nTa arxeia mesa sto DataDir einai:\n");
+			System.out.println("\nArticles inside Data dir are:\n");
 		}
 		else if(choise == 17) {
-			System.out.println("\nThes o Index na einai apo tin arxi:\n1. Gematos(ola ta arxeia tou Dir Data)\n2. Adeios\n");
+			System.out.println("\nDo you want your Index to be:\n1. Full(all data dir articles)\n2. Empty\n");
 		}
 		else if(choise == 18) {
-			System.out.println("\nEidos anazhthshs:\n1. Query Parser\n2. Boolean Query\n3. Phrase Query\n4. Query Filter\n");
+			System.out.println("\nType of search:\n1. VSM\n2. Boolean\n3. Phrase\n4. Query\n");
 		}
 		else if(choise == 19) {
-			System.out.println("\nGia na ginei swsta to Boolean Model prepei na grafeis:\nKsexarismos me parenthesis anamesa stis " + 
-							   "logikes prakseis\n&& <- AND\n|| <- OR\n^ <- NOT\n\n");
+			System.out.println("\nCorrect format of our Boolean Model must be writen with:\n" +
+							   "Logical operations\n&& <- AND\n|| <- OR\n^ <- NOT\n\n");
 		}
 		else if(choise == 20) {
-			System.out.println("\nDialekse se ti pedio thes na ginei h anazhthsh:" +
+			System.out.println("\nChoose in which field you want the search to take place:" +
 					           "\n1. Places\n2. People\n3. Title\n4. Body");
+		}
+		else if(choise == 21) {
+			System.out.println("\nChoose an article to find a similar one(Format: Article[number]):\n");
+		}
+		else if(choise == 22) {
+			System.out.println("\nNo article in the Index has that name.\n");
+		}
+		else if(choise == 23) {
+			System.out.println("\nA problem occurred.\n");
 		}
 
 	}
